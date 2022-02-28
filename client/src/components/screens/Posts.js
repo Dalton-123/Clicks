@@ -62,7 +62,7 @@ const Posts  = ()=>{
               })
           }).then(res=>res.json())
           .then(result=>{
-            //   console.log(result)
+            //   console.log(rfesult)
             const newData = data.map(item=>{
                 if(item._id==result._id){
                     return result
