@@ -1,0 +1,7 @@
+.singlepost-img{
+    border-radius: 2px;
+    overflow: hidden;
+    width: 100%;
+    max-height: 600px;
+    object-fit: fill;
+  }
