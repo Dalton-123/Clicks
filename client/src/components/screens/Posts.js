@@ -206,7 +206,7 @@ const Posts  = ()=>{
                          <p className='pl-3 pr-3'>{item.body.slice(0, 200)} <i  style={{float: 'right',cursor: 'pointer'}} className="fa fa-ellipsis-h mt-2" aria-hidden="true"></i></p>		   
                         </div>
                         <div className="p-3">
-                        <h4 class="mb-4 text-center"> Advice  for {item.postedBy.name}</h4>
+                        {/* <h4 class="mb-4 text-center"> Advice  for {item.postedBy.name}</h4> */}
 
                             {
                             
