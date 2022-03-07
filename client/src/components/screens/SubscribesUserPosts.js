@@ -2,6 +2,7 @@ import React,{useState,useEffect,useContext} from 'react'
 import {UserContext} from '../../App'
 import {Link} from 'react-router-dom'
 import './post.css'
+import moment from 'moment';
 
 import { useLocation } from "react-router";
 
@@ -61,7 +62,7 @@ const Posts  = ()=>{
               })
           }).then(res=>res.json())
           .then(result=>{
-            //   console.log(result)
+            //   console.log(rfesult)
             const newData = data.map(item=>{
                 if(item._id==result._id){
                     return result
@@ -119,126 +120,130 @@ const Posts  = ()=>{
     }
     
    return (
-    <div className="container">
-       
-                    <section className="hero">
-                    <div className="container">
-                     <div className="row">	
-                     {
-                         data.map(item=>{
-                         return(
-                      <div >
-                       
-                       <div className="cardbox shadow-lg bg-white">
-                        
-                        <div className="cardbox-heading">
-                       
-                         <div className="dropdown float-right">
-                          <button className="btn btn-flat btn-flat-icon" type="button" data-toggle="dropdown" aria-expanded="false">
-                           <em className="fa fa-ellipsis-h"></em>
-                          </button>
-                          {/* <div className="dropdown-menu dropdown-scale dropdown-menu-right me" role="menu" >
-                           <a className="dropdown-item" href="#">Hide post</a>
-                           <a className="dropdown-item" href="#">Stop following</a>
-                           <a className="dropdown-item" href="#">Report</a>
-                          </div> */}
-                         </div>
-                         <div className="media m-0">
-                          <div className="d-flex mr-3">
-                           <a href="#"><img className="img-fluid rounded-circle" src={item.postedBy.pic}/></a>
-                          </div>
-                          <div className="media-body">
-                               <p className="m-0">{item.postedBy.name}</p>
-                         
-                           <small><span><i className="icon ion-md-pin"></i> <span class="badge badge-secondary">{item.categories}</span></span></small>
-                           <small><span><i className="icon ion-md-time"></i> 10 hours ago</span></small>
-                          </div>
-                         </div>
-                        </div>
-                        <h5 className='pl-3 pr-3' style={{fontWeight:'bold'}}>{item.title}</h5>	
-                        <div className="cardbox-item">
-                        <Link to={`/post/${item._id}`}>
-                            <img className="img-fluid post-img"   src={item.photo}  alt="Image"/></Link>
-                        </div>
-                        <div className="cardbox-base">
-                         <ul className="float-right">
-                          <li><a><i className="fa fa-comments"></i></a></li>
-                          <li><a><em className="mr-5">{item.comments.length}</em></a></li>
-                          <li  onClick={()=>deletePost(item._id)}><a><i className="fa fa-trash" ></i></a></li>
-                          {/* <i className="material-icons" style={{
-                                float:"right"
-                            }} 
-                            onClick={deletePost(item._id)}
-                            >delete</i> */}
+
+<section>
  
+      {
+          data.map(item=>{
+              return(
+                <div className="card mt-3" style={{maxWidth: '42rem'}}>
+                  <div>
+                     <div className="card-body">
+     
+     <div className="d-flex mb-3">
+       <a href="">
+         <img src={item.postedBy.pic}
+           className="border rounded-circle me-2" alt="Avatar" style={{height: '40px'}} />
+       </a>
+       <div>
+         <a href="" className="text-dark mb-0">
+         <Link to={item.postedBy._id !== state._id?"/profile/"+item.postedBy._id :"/profile"  }><strong>{item.postedBy.name}</strong></Link>
+         </a>
+        <br/>
+         <small><span><i className="icon ion-md-pin"></i> <span class="badge badge-secondary">{item.categories}</span></span> - <small className="text-muted">{moment(item.createdAt).fromNow()}</small></small>
+                           
+       </div>
+     </div>
+   
+     <div>
+     <h5  style={{fontWeight:'bold'}}>{item.title}</h5>	
+       <p>
+       {item.body.slice(0, 200)}
+       </p>
+     </div>
+   </div>
   
-                          {/* <li><a><em className="mr-3">03</em></a></li> */}
-                        
-                         </ul>
-                        
-                         <ul>
-
-                         
-
-                        
-                           
-                         <li>
-                         {item.likes.includes(state._id)
-                            ? 
-                            <a><i className="fa fa-thumbs-down"   onClick={()=>{unlikePost(item._id)}}></i></a>
-                            : 
-                            <a><i className="fa fa-thumbs-up" onClick={()=>{likePost(item._id)}}></i></a>
-                            }
-                           
-                         </li>
-                            <li><a><span>{item.likes.length} Likes</span></a></li>
-                         </ul>	
-
+   <div className="bg-image hover-overlay ripple rounded-0" data-mdb-ripple-color="light">
+   <Link to={`/post/${item._id}`}><img src={item.photo}className="w-100" /></Link>
+     <a href="#!">
+       <div className="mask" style={{backgroundColor: 'rgba(251, 251, 251, 0.2)'}}></div>
+     </a>
+   </div>
+   
+   <div className="card-body">
+  
+     <div className="d-flex justify-content-between mb-3">
+       <div>
+            {item.likes.includes(state._id)
+        ? 
+        <a><i className="fa fa-thumbs-down"   onClick={()=>{unlikePost(item._id)}}></i></a>
+        : 
+        <a><i className="fa fa-thumbs-up" onClick={()=>{likePost(item._id)}}></i></a>
+        }
+       <a><span>{item.likes.length} persons had this experience</span></a>
+       </div>
+       <div>
+       <a className="mr-3"><i className="fa fa-comments"></i>{item.comments.length}</a>
                       
-                         <p className='pl-3 pr-3'>{item.body.slice(0, 200)} <i  style={{float: 'right',cursor: 'pointer'}} className="fa fa-ellipsis-h mt-2" aria-hidden="true"></i></p>		   
-                        </div>
-                        <div className="p-3">{
-                                    (item.comments.slice((item.comments.length - 3), item.comments.length)).map(record=>{
+           {item.postedBy._id == state._id &&
+            <span onClick={()=>deletePost(item._id)}><a><i className="fa fa-trash" ></i></a></span>
+          }
 
+       </div>
+     </div>
+   
+     {
+                                     (item.comments.slice((item.comments.length - 3), item.comments.length)).map(record=>{
                                         return(
-                                        <h6 key={record._id} >
-                                               <div className="d-flex mr-3">
-                           <a href="#"><img className="img-fluid rounded-circle" src={record.postedBy.pic}/></a>
-                          </div>
-                                            <span style={{fontWeight:"500"}}>{record.postedBy.name}</span> {record.text}
+                                            <div className="d-flex mb-3">
+                                            {/* <a href="">
+                                              <img src="https://mdbcdn.b-cdn.net/img/new/avatars/8.webp"
+                                                className="border rounded-circle me-2" alt="Avatar" style={{height: '40px'}} />
+                                            </a> */}
+                                            <div>
+                                              <div className="bg-light rounded-3 ">
+                                                <a href="" className="text-dark mb-0" style={{textDecoration: 'none'}}>
+                                                  <strong>{record.postedBy.name}</strong>
+                                                </a>
+                                                <a  style={{textDecoration: 'none'}} href="" className="text-muted d-block">
+                                                  <small>{record.text}</small>
+                                                </a>
+                                              </div>
                                             
-                                          </h6>
+                                            </div>
+                                          </div>
                                         )
                                     })
-                                }</div>
-                        <form className="p-2" onSubmit={(e)=>{
-                                    e.preventDefault()
-                                    makeComment(e.target[0].value,item._id)
-                                }}>
-                                 <input type="text"   id="" className="form-control form-control-md mw-100"
-                        placeholder="comment" /> 
-                         </form>
+                                }
+    
+  
+     
+       {/* <a href="">
+         <img src="https://mdbcdn.b-cdn.net/img/new/avatars/18.webp"
+           className="border rounded-circle me-2" alt="Avatar" style={{height: '40px'}} />
+       </a> */}
 
+        <form onSubmit={(e)=>{
+            e.preventDefault()
+            makeComment(e.target[0].value,item._id)
+        }}>
+           <div className="d-flex ">
+       <div className="form-outline w-100">
+       <input type="text"   id="" className="form-control form-control-md mw-100"
+                        placeholder="leave  an advice" /> 
+         <label className="form-label" for="textAreaExample">Write a comment</label>
+       </div>
+     </div>
+       </form>
+      
+      
+    
+    
+    
+     </div>
 
+     
+                  </div>
+                  </div>
+              )
+          })
+          
+      }
 
-                      
-              
-                    
-                       </div>
-                      </div>
-                      
-                )
-            })
-        }
-                      
- </div>
-                    </div>
-                   </section>
-               
-
-
-    </div>
-
+   
+  
+  
+</section>
     
    )
 }

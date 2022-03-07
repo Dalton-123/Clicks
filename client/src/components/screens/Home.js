@@ -25,7 +25,7 @@ const Home = ()=>{
         </div>
         
    </div>
-   <div class="col-lg-6 ">
+   <div class="col-lg-6  mt-4">
       <Posts   /> 
      </div> 
      <div className="col-md-3 mb-3 sticky-top">

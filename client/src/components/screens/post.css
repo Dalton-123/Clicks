@@ -6,4 +6,6 @@
     object-fit: fill;
   }
 
-  
+  .card{
+    background: red;
+  }
