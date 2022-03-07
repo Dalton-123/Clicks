@@ -118,7 +118,9 @@ router.put('/like',reqLogin,(req,res)=>{
         $push:{likes:req.user._id}
     },{
         new:true
-    }).exec((err,result)=>{
+    }).populate("postedBy","_id name pic")
+    .populate("comments.postedBy","_id name")
+    .sort('-createdAt').exec((err,result)=>{
         if(err){
             return res.status(422).json({error:err})
         }else{
@@ -131,7 +133,9 @@ router.put('/unlike',reqLogin,(req,res)=>{
         $pull:{likes:req.user._id}
     },{
         new:true
-    }).exec((err,result)=>{
+    }).populate("postedBy","_id name pic")
+    .populate("comments.postedBy","_id name")
+    .sort('-createdAt').exec((err,result)=>{
         if(err){
             return res.status(422).json({error:err})
         }else{
@@ -151,8 +155,9 @@ router.put('/comment',reqLogin,(req,res)=>{
     },{
         new:true
     })
-        .populate("comments.postedBy","_id name")
-        .populate("postedBy","_id name")
+    .populate("postedBy","_id name pic")
+    .populate("comments.postedBy","_id name")
+    .sort('-createdAt')
         .exec((err,result)=>{
             if(err){
                 return res.status(422).json({error:err})
